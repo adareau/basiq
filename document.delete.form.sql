@@ -5,6 +5,15 @@ select
     , 'arrow-back-up' as icon
 ;
 
+---------- TITLE
+SELECT 
+    'title'            AS component,
+    'Delete a document'   AS contents;
+
+select 
+    'text'              as component,
+    'You are about to delelete the following document ' as contents;
+
 --------- DOCUMENT 
 
 SELECT 'table' AS component, 'action' AS markdown;
