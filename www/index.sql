@@ -41,7 +41,7 @@ SELECT
 ;
 SELECT
     'Edit types' AS title
-    , 'configuration.types.form.sql' AS link
+    , 'configuration.document-types.sql' AS link
     , 'settings' AS icon
 ;
 
