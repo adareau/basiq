@@ -3,7 +3,7 @@
 
 set _curpath = sqlpage.path();
 set _session_required = 1;
-set _required_level = 0;
+set _required_level = 1;
 
 SELECT
     'dynamic' AS component,
@@ -12,36 +12,23 @@ SELECT
 
 -- ============================== CONTENT =======================================
 
-
-SELECT 'title' AS component
-    , 2 AS level
-    , 'Documents' AS contents;
-
 SELECT 'list' AS component;
-SELECT
-    'See all documents' AS title
-    , 'document.list.sql' AS link
-    , 'list' AS icon
-;
 SELECT
     'Add a document' AS title
     , 'document.add.form.sql' AS link
     , 'file-plus' AS icon
 ;
 
-SELECT 'title' AS component
-    , 2 AS level
-    , 'Base configuration' AS contents;
+SET _pattern = SELECT pattern from ref_pattern where id=0;
 
-SELECT 'list' AS component;
+SELECT 'table' AS component, 'action' AS markdown;
 SELECT
-    'Edit projects' AS title
-    , 'configuration.projects.form.sql' AS link
-    , 'settings' AS icon
-;
-SELECT
-    'Edit types' AS title
-    , 'configuration.types.form.sql' AS link
-    , 'settings' AS icon
-;
-
+    format($_pattern, id) AS reference, -- TODO put ref string in table
+    title, 
+    author, 
+    date, 
+    IF(filepath is null, "No document", format('[Go to document](%s)', filepath)) as action, 
+    format('| [Edit](edit.sql?id=%s)', id) AS action,
+    format('| [Upload](document.upload.form.sql?id=%s)', id) AS action,
+    format('| [Delete](document.delete.form.sql?id=%s)', id) AS action
+FROM documents;
