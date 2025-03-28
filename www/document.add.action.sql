@@ -10,21 +10,42 @@ SELECT
     sqlpage.run_sql('auth.header.shell-session.sql') AS properties,
     sqlpage.read_file_as_text('shell.json') AS properties;
 
--- ============================== CONTENT =======================================
+-- ============================== GET DATA =======================================
+
+set _username = (
+    SELECT username
+    FROM sessions
+    WHERE sqlpage.cookie('session_token') = id
+      AND created_at > datetime('now', '-1 day')
+);
+
+-- ============================== POST =======================================
 
 INSERT INTO documents (
     title, 
-    author,
-    date,
-    is_reviewed
+    author_name,
+    author_org,
+    project,
+    type,
+    creation_date,
+    last_modification_date,
+    creation_user,
+    last_modification_user
+
 )
 VALUES(
     :Title, 
-    :Author,
-    :Date,
-    :Reviewed is not null
+    :AuthorName,
+    :AuthorOrg,
+    :Project,
+    :Type,
+    DATE(),
+    DATE(),
+    $_username,
+    $_username
 );
 
+-- ============================== CONTENT =======================================
 select 
     'alert'                    as component,
     'Success !!'       as title,

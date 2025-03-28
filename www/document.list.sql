@@ -25,9 +25,9 @@ SELECT 'table' AS component, 'action' AS markdown;
 SELECT
     format($_pattern, id) AS reference, -- TODO put ref string in table
     title, 
-    author, 
-    date, 
-    IF(filepath is null, "No document", format('[Go to document](%s)', filepath)) as action, 
+    author_name, 
+    creation_date, 
+    IF(current_version_filepath is null, "No document", format('[Go to document](%s)', current_version_filepath)) as action, 
     format('| [Edit](edit.sql?id=%s)', id) AS action,
     format('| [Upload](document.upload.form.sql?id=%s)', id) AS action,
     format('| [Delete](document.delete.form.sql?id=%s)', id) AS action

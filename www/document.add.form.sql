@@ -25,26 +25,36 @@ select
 
 select
     'Title' as name,
-    'Document Title' as label,
+    'Title' as label,
     'text' as type,
     TRUE as required;
 
 select
-    'Author' as name,
-    'Document Author' as label,
+    'AuthorName' as name,
+    'Author Name' as label,
     'text' as type,
     TRUE as required;
 
-SELECT
-    'Reviewed' AS name,
-    'Reviewed' AS label,
-    'checkbox' AS type,
-    FALSE as checked;
-
--- DATE
-select 
-    'Date'       as name,
-    'Last Version Date' as label,
-    'date'       as type,
-    DATE()       as value,
+select
+    'AuthorOrg' as name,
+    'Author Organization' as label,
+    'text' as type,
     TRUE as required;
+
+select
+    'Project' as name, 
+    'Project' as label,
+    'select' as type,
+    (SELECT json_group_array(json_object('label', name, 'value', name)) FROM (
+        SELECT name FROM projects
+        ORDER BY name COLLATE NOCASE
+      )) AS options;
+
+select
+    'Type' as name, 
+    'Type' as label,
+    'select' as type,
+    (SELECT json_group_array(json_object('label', name, 'value', name)) FROM (
+        SELECT name FROM document_types
+        ORDER BY name COLLATE NOCASE
+      )) AS options;

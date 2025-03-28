@@ -30,12 +30,14 @@ select
 
 --------- DOCUMENT 
 
+SET _pattern = SELECT pattern from ref_pattern where id=0;
+
 SELECT 'table' AS component, 'action' AS markdown;
 SELECT
-    format('atomQTRL-DOC-%03d', id) AS reference,
+    format($_pattern, id) AS reference,
     title, 
-    author, 
-    date 
+    author_name, 
+    creation_date 
 FROM documents
 WHERE id=$id;
 
