@@ -15,9 +15,8 @@ WHERE $username IS NOT NULL;
 -- =============================================================================
 
 SELECT
-    'shell' AS component,
-    'CRUD with Authentication' AS title,
-    'database' AS icon;
+    'dynamic' AS component,
+    sqlpage.read_file_as_text('shell.json') AS properties;
 
 -- =============================================================================
 -- ================================= Login =====================================

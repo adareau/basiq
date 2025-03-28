@@ -52,6 +52,7 @@
 set _curpath = ifnull($_curpath, '/');
 set _session_required = ifnull($_session_required, 1);
 set _shell_enabled = ifnull($_shell_enabled, 1);
+set _required_level = ifnull($_required_level, 100);  -- by default, need admin
 
 -- =============================================================================
 -- ========================= Check active session ==============================
@@ -67,6 +68,12 @@ set _username = (
       AND created_at > datetime('now', '-1 day')
 );
 
+set _user_rights = (
+    SELECT rights
+    FROM accounts
+    WHERE username = $_username
+);
+
 -- Redirect to the login page if the user is not logged in.
 -- Unprotected pages must
 -- set _session_required = (SELECT FALSE);
@@ -75,4 +82,4 @@ set _username = (
 SELECT
     'redirect' AS component,
     '/auth.login.sql?path=' || $_curpath AS link
-WHERE $_username IS NULL AND $_session_required;
+WHERE ($_username IS NULL OR $_user_rights < $_required_level) AND $_session_required;

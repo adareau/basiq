@@ -1,0 +1,15 @@
+{
+    "component": "shell",
+    "title": "Document Database",
+    "link": "/",
+    "menu_item": [
+        {"link": "index.sql", "title": "Home"},
+        {"title": "User", "submenu": [
+            {"link": "/auth.logout.sql", "title": "Logout"}
+        ]},
+        {"title": "Admin", "submenu": [
+            {"link": "/admin.index.sql", "title": "Panel"},
+            {"link": "/admin.user.add.form.sql", "title": "add user"}
+        ]}
+    ]
+}
