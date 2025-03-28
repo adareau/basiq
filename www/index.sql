@@ -36,7 +36,7 @@ SELECT 'title' AS component
 SELECT 'list' AS component;
 SELECT
     'Edit projects' AS title
-    , 'configuration.projects.form.sql' AS link
+    , 'configuration.projects.sql' AS link
     , 'settings' AS icon
 ;
 SELECT

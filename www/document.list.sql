@@ -17,7 +17,7 @@ SELECT
     'Add a document' AS title
     , 'document.add.form.sql' AS link
     , 'file-plus' AS icon
-;
+;   
 
 SET _pattern = SELECT pattern from ref_pattern where id=0;
 
