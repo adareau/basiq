@@ -5,10 +5,11 @@
     "menu_item": [
         {"link": "index.sql", "title": "Home"},
         {"title": "User", "submenu": [
-            {"link": "/auth.logout.sql", "title": "Logout"}
+            {"link": "/auth.logout.sql", "title": "logout"}
         ]},
         {"title": "Admin", "submenu": [
-            {"link": "/admin.index.sql", "title": "Panel"},
+            {"link": "/admin.index.sql", "title": "admin panel"},
+            {"link": "/admin.settings.sql", "title": "settings"},
             {"link": "/admin.user.add.form.sql", "title": "add user"}
         ]}
     ]

@@ -20,10 +20,11 @@ SELECT
 ;
 
 
+SET _pattern = SELECT pattern from ref_pattern where id=0;
 
 SELECT 'table' AS component, 'action' AS markdown;
 SELECT
-    format('atomQTRL-DOC-%03d', id) AS reference, -- TODO put ref string in table
+    format($_pattern, id) AS reference, -- TODO put ref string in table
     title, 
     author, 
     date, 
