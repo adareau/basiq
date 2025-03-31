@@ -52,7 +52,7 @@ set _new_history = json_insert($_upload_history, '$[#]', $_history_line);
 -- ============================== PREPARE DOCUMENT LOG ================================
 -- prepare history update
 set _log_line = json_object("date", format("%s:%s", date(), time()), 
-                            "action", "upload document",
+                            "action", "pdf uploaded",
                             "details", format("version %s, dated %s (file %s))", :Version, :Date, $new_filepath),
                             "user", $_username);
 

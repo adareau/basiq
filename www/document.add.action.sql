@@ -19,6 +19,16 @@ set _username = (
       AND created_at > datetime('now', '-1 day')
 );
 
+-- ============================== PREPARE DOCUMENT LOG ================================
+-- prepare history update
+set _log_line = json_object("date", format("%s:%s", date(), time()), 
+                            "action", "document created",
+                            "details", format("version %s, dated %s (file %s))", :Version, :Date, $new_filepath),
+                            "user", $_username);
+
+-- initiate a log
+set _log = json_array($_log_line);
+
 -- ============================== POST =======================================
 
 INSERT INTO documents (
@@ -31,7 +41,8 @@ INSERT INTO documents (
     creation_date,
     last_modification_date,
     creation_user,
-    last_modification_user
+    last_modification_user,
+    action_log
 
 )
 VALUES(
@@ -44,7 +55,8 @@ VALUES(
     DATE(),
     DATE(),
     $_username,
-    $_username
+    $_username,
+    $_log
 );
 
 -- ============================== CONTENT =======================================
