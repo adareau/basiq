@@ -1,3 +1,4 @@
 db/*
 *.bin
 www/documents/*
+www/test.sql
