@@ -13,16 +13,47 @@ select
 
 -- ============================== CONTENT =======================================
 
-select 'list' as component;
+--- =====  NAVIGATION  =====
+
+select 
+    'button' as component;
 select
-    'Back to document list'   as title
-    , 'document.list.sql'     as link
-    , 'arrow-back-up' as icon
-;
+    --'Back to document list'   as title,
+    'document.list.sql'     as link,
+    'arrow-back-up' as icon,
+    'Back to list' as tooltip;
+select 
+    format('document.edit.form.sql?id=%s', $id) as link,
+    TRUE      as narrow,
+    'edit'    as icon,
+    'primary' as color,
+    'Edit'    as tooltip;
+select 
+    current_version_filepath as link,
+    (current_version_filepath is null) as disabled,
+    TRUE       as narrow,
+    'eye' as icon,
+    'primary'  as color,
+    'See last version' as tooltip
+    from documents where id=$id;
+select 
+    format('document.upload.form.sql?id=%s', $id) as link,
+    TRUE      as narrow,
+    'upload'  as icon,
+    'primary' as color,
+    'Upload'  as tooltip;
+select 
+    format('document.delete.form.sql?id=%s', $id) as link,
+    TRUE     as narrow,
+    'trash'  as icon,
+    'danger' as color,
+    'Delete (admin only)' as tooltip;
+
+
+--- =====  DOCUMENT INFO BLOCK  =====
 
 set _pattern = select pattern from ref_pattern where id=0;
 
---- =====  DOCUMENT INFO BLOCK  =====
 select 
     'title'   as component,
     'Document info' as contents,
