@@ -14,13 +14,14 @@ SELECT
 
 select 'list' as component;
 select
-    'Back to index'   as title
-    , 'index.sql'     as link
+    'Back to document list'   as title
+    , 'document.list.sql'     as link
     , 'arrow-back-up' as icon
 ;
 
 select 
     'form'                       as component,
+    'Create new document entry' as validate,
     'document.add.action.sql'    as action;
 
 select
@@ -58,3 +59,9 @@ select
         SELECT name FROM document_types
         ORDER BY name COLLATE NOCASE
       )) AS options;
+
+
+select 
+    'Comments'   as name,
+    'Comments'   as label,
+    'textarea' as type;

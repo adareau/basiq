@@ -27,6 +27,7 @@ INSERT INTO documents (
     author_org,
     project,
     type,
+    comment,
     creation_date,
     last_modification_date,
     creation_user,
@@ -39,6 +40,7 @@ VALUES(
     :AuthorOrg,
     :Project,
     :Type,
+    :Comments,
     DATE(),
     DATE(),
     $_username,
@@ -52,10 +54,14 @@ select
     'rosette-discount-check'                  as icon,
     'teal'                     as color,
     False                       as dismissible,
-    'Document sucessfully entered.' as description;
+    'Document sucessfully created.' as description;
 select 
     'index.sql'       as link,
     'Edit document' as title;
+select 
+    'document.list.sql'    as link,
+    'Back to document list' as title,
+    'secondary'    as color;
 select 
     'index.sql'    as link,
     'Back to home' as title,
