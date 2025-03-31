@@ -14,8 +14,8 @@ SELECT
 
 select 'list' as component;
 select
-    'Back to index'   as title
-    , 'index.sql'     as link
+    'Back to document list'   as title
+    , 'document.list.sql'     as link
     , 'arrow-back-up' as icon
 ;
 

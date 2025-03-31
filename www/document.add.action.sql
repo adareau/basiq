@@ -19,19 +19,9 @@ set _username = (
       AND created_at > datetime('now', '-1 day')
 );
 
--- ============================== PREPARE DOCUMENT LOG ================================
--- prepare history update
-set _log_line = json_object("date", format("%s:%s", date(), time()), 
-                            "action", "document created",
-                            "details", format("version %s, dated %s (file %s))", :Version, :Date, $new_filepath),
-                            "user", $_username);
-
--- initiate a log
-set _log = json_array($_log_line);
-
 -- ============================== POST =======================================
 
-INSERT INTO documents (
+insert into documents (
     title, 
     author_name,
     author_org,
@@ -41,11 +31,10 @@ INSERT INTO documents (
     creation_date,
     last_modification_date,
     creation_user,
-    last_modification_user,
-    action_log
+    last_modification_user
 
 )
-VALUES(
+values(
     :Title, 
     :AuthorName,
     :AuthorOrg,
@@ -55,10 +44,20 @@ VALUES(
     DATE(),
     DATE(),
     $_username,
-    $_username,
-    $_log
+    $_username
 );
 
+
+-- ============================== POST EVENT IN DOC LOG ================================
+
+-- get id from
+set id = SELECT last_insert_rowid();
+
+-- add info to log table
+insert into documents_log (doc_id, action, user, details)
+       values ($id, "document created", $_username, "");
+     
+     
 -- ============================== CONTENT =======================================
 select 
     'alert'                    as component,
@@ -66,7 +65,7 @@ select
     'rosette-discount-check'                  as icon,
     'teal'                     as color,
     False                       as dismissible,
-    'Document sucessfully created.' as description;
+    format('Document sucessfully created (id=%s).', $id) as description;
 select 
     'index.sql'       as link,
     'Edit document' as title;

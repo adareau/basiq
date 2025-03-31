@@ -22,21 +22,16 @@ CREATE TABLE documents (
     current_version_date TEXT,
     current_version_upload_date TEXT,
     current_version_user TEXT,
-    upload_history TEXT,
 
     -- review and validation
     review_date TEXT,
     review_author TEXT,
     review_version TEXT,
-    review_history TEXT,
 
     validation_date TEXT,
     validation_author TEXT,
     validation_version TEXT,
-    validation_history TEXT,
 
-    -- log
-    action_log TEXT,
 
     -- flags
     archived BOOLEAN DEFAULT FALSE

@@ -31,7 +31,8 @@ select
     author_name, 
     creation_date, 
     if(current_version_filepath is null, "No PDF", format('[PDF](%s)', current_version_filepath)) as pdf, 
-    format('[Edit](edit.sql?id=%s)', id) AS actions,
+    format('[Info](document.view.sql?id=%s)', id) AS actions,
+    format('| [Edit](document.edit.form.sql?id=%s)', id) as actions,
     format('| [Upload](document.upload.form.sql?id=%s)', id) as actions,
     format('| [Delete](document.delete.form.sql?id=%s)', id) as actions
 from documents;
