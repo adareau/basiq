@@ -25,7 +25,7 @@ SELECT
 ;
 SELECT
     'Add a document' AS title
-    , 'document.add.form.sql' AS link
+    , 'document.edit.form.sql' AS link
     , 'file-plus' AS icon
 ;
 

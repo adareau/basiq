@@ -15,7 +15,7 @@ select
 select 'list' as component;
 select
     'Add a document' as title
-    , 'document.add.form.sql' as link
+    , 'document.edit.form.sql' as link
     , 'file-plus' as icon
 ;   
 
