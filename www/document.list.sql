@@ -11,6 +11,7 @@ select
     sqlpage.read_file_as_text('shell.json') as properties;
 
 -- ============================== CONTENT =======================================
+-- NAVIGATION
 
 select 'list' as component;
 select
@@ -19,7 +20,60 @@ select
     , 'file-plus' as icon
 ;   
 
+-- GET PATTERN
+
 set _pattern = select pattern from ref_pattern where id=0;
+
+-- ALERTS
+
+-- deletion success
+
+select 
+    'alert'                    as component,
+    'Success !'                as title,
+    'rosette-discount-check'   as icon,
+    'teal'                     as color,
+    True                       as dismissible,
+    format("Document '%s' sucessfully deleted", format($_pattern, $docid)) as description
+where $delete_success is True;
+
+
+-- add success
+
+select 
+    'alert'                    as component,
+    'Success !'                as title,
+    'rosette-discount-check'   as icon,
+    'teal'                     as color,
+    True                       as dismissible,
+    format("Document '%s' sucessfully created", format($_pattern, $docid)) as description
+where $add_success is True;
+
+
+-- edit success
+
+select 
+    'alert'                    as component,
+    'Success !'                as title,
+    'rosette-discount-check'   as icon,
+    'teal'                     as color,
+    True                       as dismissible,
+    format("Document '%s' sucessfully edited", format($_pattern, $docid)) as description
+where $edit_success is True;
+
+-- upload success
+
+select 
+    'alert'                    as component,
+    'Success !'                as title,
+    'rosette-discount-check'   as icon,
+    'teal'                     as color,
+    True                       as dismissible,
+    format("Document '%s' sucessfully uploaded with name '%s'", format($_pattern, $docid), $fname) as description
+where $upload_success is True;
+
+
+-- LIST
 set _view_pattern = "[%s](document.view.sql?id=%s)"
 select 
     'table' as component,

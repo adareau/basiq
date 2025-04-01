@@ -7,8 +7,7 @@ set _required_level = 10;
 
 select
     'dynamic' as component,
-    sqlpage.run_sql('auth.header.shell-session.sql') as properties,
-    sqlpage.read_file_as_text('shell.json') as properties;
+    sqlpage.run_sql('auth.header.shell-session.sql') as properties;
 
 -- ============================== GET DATA =======================================
 
@@ -79,17 +78,6 @@ insert into uploads_log (
      
 
 -- ============================== CONTENT =======================================
-select 
-    'alert'                    as component,
-    'Success !!'       as title,
-    'rosette-discount-check'                  as icon,
-    'teal'                     as color,
-    False                       as dismissible,
-    format('Document sucessfully uploaded as %s', $fname) as description;
-select 
-    'index.sql'       as link,
-    'Edit document' as title;
-select 
-    'index.sql'    as link,
-    'Back to home' as title,
-    'secondary'    as color;
+select
+    'redirect' as component,
+    'document.list.sql?upload_success=1&docid=' || $id || '&fname=' || sqlpage.url_encode($fname) as link;

@@ -7,8 +7,7 @@ set _required_level = 10;
 
 SELECT
     'dynamic' AS component,
-    sqlpage.run_sql('auth.header.shell-session.sql') AS properties,
-    sqlpage.read_file_as_text('shell.json') AS properties;
+    sqlpage.run_sql('auth.header.shell-session.sql') AS properties;
 
 -- ============================== GET DATA =======================================
 
@@ -58,22 +57,6 @@ insert into documents_log (doc_id, action, user, details)
        values ($id, "document created", $_username, "");
      
      
--- ============================== CONTENT =======================================
-select 
-    'alert'                    as component,
-    'Success !!'       as title,
-    'rosette-discount-check'                  as icon,
-    'teal'                     as color,
-    False                       as dismissible,
-    format('Document sucessfully created (id=%s).', $id) as description;
-select 
-    'index.sql'       as link,
-    'Edit document' as title;
-select 
-    'document.list.sql'    as link,
-    'Back to document list' as title,
-    'secondary'    as color;
-select 
-    'index.sql'    as link,
-    'Back to home' as title,
-    'secondary'    as color;
+select
+    'redirect' as component,
+    'document.list.sql?add_success=1&docid=' || $id as link;

@@ -7,8 +7,7 @@ set _required_level = 100;
 
 SELECT
     'dynamic' AS component,
-    sqlpage.run_sql('auth.header.shell-session.sql') AS properties,
-    sqlpage.read_file_as_text('shell.json') AS properties;
+    sqlpage.run_sql('auth.header.shell-session.sql') AS properties;
 
 -- ============================== GET DATA =======================================
 
@@ -30,16 +29,6 @@ insert into documents_log (doc_id, action, user, details)
        values ($id, "document deleted", $_username, "");
 
 -- ============================== CONTENT =======================================
-
---------- BACK
-
-select 
-    'alert'                    as component,
-    'Success !!'       as title,
-    'rosette-discount-check'                  as icon,
-    'teal'                     as color,
-    False                       as dismissible,
-    'Document sucessfully deleted.' as description;
-select 
-    'document.list.sql'       as link,
-    'Back to document list' as title;
+select
+    'redirect' as component,
+    'document.list.sql?delete_success=1&docid=' || $id as link;
