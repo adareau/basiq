@@ -13,10 +13,10 @@ set _curpath = sqlpage.path();
 set _session_required = 1;
 set _required_level = 10;
 
-SELECT
-    'dynamic' AS component,
-    sqlpage.run_sql('auth.header.shell-session.sql') AS properties,
-    sqlpage.read_file_as_text('shell.json') AS properties;
+select
+    'dynamic' as component,
+    sqlpage.run_sql('auth.header.shell-session.sql') as properties,
+    sqlpage.read_file_as_text('shell.json') as properties;
 
 
 -- ============================== CONTENT =======================================
@@ -32,8 +32,8 @@ select
 ;
 
 ---------- TITLE
-SELECT 
-    'title'            AS component,
+select 
+    'title'            as component,
     (select case when $id is not null 
           then "Update a document"
           else "Create a new document" end) as contents;
@@ -81,20 +81,20 @@ select
     'Project' as label,
     'select' as type,
     (select project from documents where id=$id) as value,
-    (SELECT json_group_array(json_object('label', name, 'value', name)) FROM (
-        SELECT name FROM projects
-        ORDER BY name COLLATE NOCASE
-      )) AS options;
+    (select json_group_array(json_object('label', name, 'value', name)) from (
+        select name from projects
+        order by name collate NOCASE
+      )) as options;
 
 select
     'Type' as name, 
     'Type' as label,
     'select' as type,
     (select type from documents where id=$id) as value,
-    (SELECT json_group_array(json_object('label', name, 'value', name)) FROM (
-        SELECT name FROM document_types
-        ORDER BY name COLLATE NOCASE
-      )) AS options;
+    (select json_group_array(json_object('label', name, 'value', name)) from (
+        select name from document_types
+        order by name collate NOCASE
+      )) as options;
 
 
 select 

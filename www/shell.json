@@ -5,7 +5,8 @@
     "menu_item": [
         {"link": "index.sql", "title": "Home"},
         {"title": "User", "submenu": [
-            {"link": "/auth.logout.sql", "title": "logout"}
+            {"link": "/auth.logout.sql", "title": "logout"},
+            {"link": "/user.password.change.sql", "title": "change password"}
         ]},
         {"title": "Admin", "submenu": [
             {"link": "/admin.index.sql", "title": "admin panel"},
