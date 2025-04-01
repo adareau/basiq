@@ -2,3 +2,4 @@ db/*
 *.bin
 www/documents/*
 www/test.sql
+notes_deploiement.md
