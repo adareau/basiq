@@ -25,7 +25,7 @@ SET _pattern = select pattern from ref_pattern where id=0;
 
 set filepath = sqlpage.persist_uploaded_file('DocumentFile', 'documents');
 set fname_base = format($_pattern, :id)
-set fname = format('%s_%s:%s.pdf', $fname_base, date(), time());
+set fname = format('%s-v%s_%s:%s.pdf', $fname_base, :Version, date(), time());
 set new_filepath = format('/documents/%s', $fname);
 set relative_path_old = format("./www/%s", $filepath);
 set relative_path_new = format("./www/%s", $new_filepath);
