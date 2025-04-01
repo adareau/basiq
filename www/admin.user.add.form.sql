@@ -44,4 +44,4 @@ select
 select 
     'Rights'             as name,
     'select'            as type,
-    '[{"label": "Read only", "value": 0}, {"label": "Edit", "value": 10}, {"label": "Admin", "value": 100}]' as options;
+    '[{"label": "Read only", "value": 1}, {"label": "Edit", "value": 10}, {"label": "Admin", "value": 100}]' as options;
