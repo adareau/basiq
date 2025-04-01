@@ -49,6 +49,15 @@ select
     format("Document '%s' sucessfully created", format($_pattern, $docid)) as description
 where $add_success is True;
 
+select 
+    'alert'                    as component,
+    'Add a file ?'                as title,
+    'upload'   as icon,
+    True                       as dismissible,
+    format("Click here to upload a document for '%s'", format($_pattern, $docid)) as link_text,
+    "document.upload.form.sql?id=" || $docid as link
+where $add_success is True;
+
 
 -- edit success
 
