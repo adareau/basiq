@@ -5,25 +5,21 @@ set _curpath = sqlpage.path();
 set _session_required = 1;
 set _required_level = 100;
 
-SELECT
+-- do not allow to delete admin
+select
+    'redirect' as component,
+    'admin.user.management.sql?delete_admin=1' as link
+where $username = "admin";
+
+-- autch
+select
     'dynamic' AS component,
     sqlpage.run_sql('auth.header.shell-session.sql') AS properties;
+-- ============================== DELETE =======================================
 
--- ============================== CONTENT =======================================
-
-set _hash_pass = sqlpage.hash_password(:Password)
-
-INSERT INTO accounts (
-    username, 
-    password_hash,
-    rights
-)
-VALUES(
-    :Username, 
-    $_hash_pass,
-    :Rights
-);
+delete from accounts
+where username = $username;
 
 select
     'redirect' as component,
-    'admin.user.management.sql?add_success=1&user=' || :Username as link;
+    'admin.user.management.sql?delete_success=1&user=' || $username as link;

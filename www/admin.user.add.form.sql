@@ -12,6 +12,15 @@ SELECT
 
 -- ============================== CONTENT =======================================
 
+---------- NAVIGATION
+
+select 'list' as component;
+select
+    'Back to user list'   as title
+    , 'admin.user.management.sql'     as link
+    , 'arrow-back-up' as icon
+;
+
 select 
     'form'                       as component,
     'New User' as title,

@@ -11,7 +11,7 @@
         {"title": "Admin", "submenu": [
             {"link": "/admin.index.sql", "title": "admin panel"},
             {"link": "/admin.settings.sql", "title": "settings"},
-            {"link": "/admin.user.add.form.sql", "title": "add user"}
+            {"link": "/admin.user.management.sql", "title": "manage users"}
         ]}
     ]
 }
