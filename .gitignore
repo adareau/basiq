@@ -6,3 +6,4 @@ www/test.sql
 notes_deploiement.md
 __venv__
 *.pyc
+tests
