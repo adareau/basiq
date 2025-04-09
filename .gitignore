@@ -1,5 +1,8 @@
 db/*.sqlite
 *.bin
 www/documents/*.pdf
+www/documents/originals/*.pdf
 www/test.sql
 notes_deploiement.md
+__venv__
+*.pyc
