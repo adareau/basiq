@@ -1,5 +1,5 @@
-db/*
+db/*.sqlite
 *.bin
-www/documents/*
+www/documents/*.pdf
 www/test.sql
 notes_deploiement.md
