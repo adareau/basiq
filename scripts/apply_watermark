@@ -22,9 +22,9 @@ from PyPDF2 import PdfReader, PdfWriter
 # % SETTINGS
 
 DIR = Path(__file__).parents[0]  # returns the script directory
-DB_PATH = DIR / ".." / ".." / "db" / "basiq.sqlite"
-WWW_DIR = DIR / ".."
-ORIGINALS_FOLDER = DIR / "originals"
+DB_PATH = DIR / ".." / "db" / "basiq.sqlite"
+WWW_DIR = DIR / ".." / "www"
+ORIGINALS_FOLDER = WWW_DIR / "documents" / "originals"
 WATERMARK_FORMAT = "{doc_ref} v{version} dated.{date} upload.{timestamp} (id:{doc_id})"
 
 # % FUNCTIONS

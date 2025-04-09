@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./__venv__/bin/python3 ./scripts/apply_watermark
