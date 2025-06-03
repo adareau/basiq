@@ -20,5 +20,6 @@ CREATE TABLE uploads_log (
     date TEXT NOT NULL,
     user TEXT NOT NULL,
     file TEXT NOT NULL,
+    watermarked BOOLEAN DEFAULT False,
     comments TEXT NOT NULL
 );

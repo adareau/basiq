@@ -1,0 +1,226 @@
+#! /usr/bin/env python3
+"""
+Applies a watermark to the uploaded documents, using information
+from the database
+"""
+# % IMPORTS
+
+# - database connection
+import sqlite3
+
+# - file management
+import shutil
+from pathlib import Path
+
+# - pdf management
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm, inch
+from reportlab.lib import colors
+from PyPDF2 import PdfReader, PdfWriter
+
+
+# % SETTINGS
+
+DIR = Path(__file__).parents[0]  # returns the script directory
+DB_PATH = DIR / ".." / "db" / "basiq.sqlite"
+WWW_DIR = DIR / ".." / "www"
+ORIGINALS_FOLDER = WWW_DIR / "documents" / "originals"
+WATERMARK_FORMAT = "{doc_ref} v{version} dated.{date} upload.{timestamp} (id:{doc_id})"
+
+# % FUNCTIONS
+
+# ------  SQL CONNECTION ------
+
+
+def sqlconnector(db_path):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            # - check that database exists
+            msg = f"Cannot find database '{db_path.resolve()}': file does not exist"
+            if not db_path.exists():
+                raise FileExistsError(msg)
+            # - connect and execute
+            with sqlite3.connect(db_path) as db_con:
+                res = func(db_con, *args, **kwargs)
+            # - return
+            return res
+
+        return wrapper
+
+    return decorator
+
+
+# ------ GETTING DOCUMENT INFORMATION ------
+
+
+@sqlconnector(DB_PATH)
+def get_document_to_watermark(db_con):
+    write_log("watermark", "get documents to watermark")
+    # -- prepare sql request
+    sql_req = "select * from uploads_log where watermarked=False;"
+    cur = db_con.execute(sql_req)
+    # -- store results in dictionnary
+    fields = [x[0] for x in cur.description]
+    documents = []
+    for row in cur:
+        new_document = {k: v for k, v in zip(fields, row)}
+        documents.append(new_document)
+    return documents
+
+
+@sqlconnector(DB_PATH)
+def get_document_information(db_con, doc_id):
+    write_log("watermark", "get document information")
+    # -- prepare sql request
+    sql_req = "select * from documents where id=?;"
+    cur = db_con.execute(sql_req, (doc_id,))
+    # -- store results in dictionnary
+    fields = [x[0] for x in cur.description]
+    doc_info = []
+    for row in cur:
+        new_document = {k: v for k, v in zip(fields, row)}
+        doc_info.append(new_document)
+    return doc_info[0]
+
+
+@sqlconnector(DB_PATH)
+def get_document_ref(db_con, doc_id):
+    write_log("watermark", "get document ref")
+    # -- prepare sql request
+    sql_req = "select format(pattern, ?) from ref_pattern where id=0;"
+    cur = db_con.execute(sql_req, (doc_id,))
+    res = cur.fetchone()[0]
+    return res
+
+
+# ------ DOCUMENT STAMPING ------
+
+
+def stamp_document(
+    document_path,
+    text,
+    suffix="_stmp",
+    margin_top_cm=0.3,
+    margin_left_cm=0.45,
+):
+    write_log("watermark", f"stamping file '{document_path.resolve()}'")
+    # -- prepare output name
+    output_name = document_path.stem + suffix + ".pdf"
+    output_path = document_path.parents[0] / output_name
+
+    # -- open document
+    pdf_in = PdfReader(document_path)
+
+    # -- get page size
+    box = pdf_in.pages[0].mediabox
+    # output in "user space units", that are 1/72 inch
+    # yes, why not....
+    height = box.height * (1 / 72) * inch
+
+    # -- create a watermark pdf (temporary)
+    stamp_path = document_path.parents[0] / "stamp.tmp.pdf"
+    stamp = canvas.Canvas(str(stamp_path), pagesize=(box.width, box.height))
+    stamp.setFillColor(colors.grey, alpha=0.6)
+    stamp.setFontSize(10)
+    stamp.rotate(90)
+    stamp.drawRightString(height - margin_top_cm * cm, -margin_left_cm * cm, text)
+    stamp.save()
+
+    # -- open watermark
+    pdf_stamp = PdfReader(stamp_path)
+    stamp_page = pdf_stamp.pages[0]
+
+    # -- prepare output
+    pdf_out = PdfWriter()
+    for pdf_page in pdf_in.pages:
+        pdf_page.merge_page(stamp_page)
+        pdf_out.add_page(pdf_page)
+
+    # -- write
+    pdf_out.write(output_path)
+
+    # -- clean
+    stamp_path.unlink()
+
+    return output_path
+
+
+@sqlconnector(DB_PATH)
+def mark_file_as_stamped(db_con, id):
+    write_log("watermark", "mark document as stamped in database")
+    # -- prepare sql request
+    sql_req = "update uploads_log set watermarked=True where id=?;"
+    db_con.execute(sql_req, (id,))
+
+
+def move_files(document_path, stamped_path):
+    write_log("watermark", "move files")
+    # -- create dir if needed
+    if not ORIGINALS_FOLDER.exists():
+        ORIGINALS_FOLDER.mkdir()
+    # -- prepare names
+    name = document_path.name
+    original_path = ORIGINALS_FOLDER / name
+    # -- move
+    shutil.move(document_path, original_path)
+    shutil.move(stamped_path, document_path)
+
+
+# ------ LOGGER ------
+@sqlconnector(DB_PATH)
+def write_log(db_con, action, details="", error=False):
+    db_con.execute(
+        "INSERT INTO log(action, details, error) values(?, ?, ?)",
+        (action, details, error),
+    )
+
+
+# % MAIN ROUTINE
+
+
+def main():
+    write_log("watermark", "--- starting ---")
+    # -- get documents to watermark
+    documents = get_document_to_watermark()
+    # -- loop on documents
+    for doc in documents:
+        write_log("watermark", f"document found {doc["file"]}")
+        # - keep id for later
+        id = doc["id"]
+        # - get document info
+        doc_info = get_document_information(doc["doc_id"])
+        # - get reference
+        doc_ref = get_document_ref(doc["doc_id"])
+        # - add all info to doc dict
+        doc |= doc_info
+        doc["doc_ref"] = doc_ref
+        # - prepare watermark
+        watermark_text = WATERMARK_FORMAT.format(**doc)
+        # - prepare document path
+        file_path = doc["file"]
+        if file_path.startswith("/"):
+            file_path = file_path[1:]
+        document_path = WWW_DIR / file_path
+        if document_path.is_file():
+            stamped_path = stamp_document(document_path, watermark_text)
+            mark_file_as_stamped(id)
+            # - move files
+            move_files(document_path, stamped_path)
+
+        else:
+            write_log(
+                "watermark",
+                f"file {document_path.resolve()} does not exist",
+                error=True,
+            )
+
+    write_log("watermark", "--- success ---")
+
+
+# % EXECUTION
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        write_log("watermark", str(e), error=True)
+        raise e

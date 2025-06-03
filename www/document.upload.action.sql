@@ -31,6 +31,7 @@ set relative_path_new = format("./www/%s", $new_filepath);
 set _ = sqlpage.exec('mv', $relative_path_old, $relative_path_new);
 
 
+
 -- ============================== UPDATE DATABASE =======================================
 -- update document
 update documents
@@ -41,6 +42,8 @@ set
     current_version_upload_date = DATE(),
     current_version_user = $_username
 where id=:id
+
+
 
 -- ============================== POST EVENT IN DOC LOG ================================
 
@@ -76,6 +79,9 @@ insert into uploads_log (
     :Comment
 );
      
+-- ============================== APPLY WATERMARK =======================================
+
+set _ = sqlpage.exec('./scripts/post_upload');
 
 -- ============================== CONTENT =======================================
 select
