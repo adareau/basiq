@@ -1,0 +1,12 @@
+[
+        {"link": "index.sql", "title": "Home"},
+        {"title": "User", "submenu": [
+            {"link": "/auth.logout.sql", "title": "logout"},
+            {"link": "/user.password.change.sql", "title": "change password"}
+        ]},
+        {"title": "Admin", "submenu": [
+            {"link": "/admin.index.sql", "title": "admin panel"},
+            {"link": "/admin.settings.sql", "title": "settings"},
+            {"link": "/admin.user.management.sql", "title": "manage users"}
+        ]}
+]
