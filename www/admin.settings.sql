@@ -8,7 +8,7 @@ set _required_level = 100;
 SELECT
     'dynamic' AS component,
     sqlpage.run_sql('auth.header.shell-session.sql') AS properties,
-    sqlpage.read_file_as_text('shell.json') AS properties;
+    sqlpage.run_sql('header.shell.sql') AS properties;
 
 -- ============================== CONTENT =======================================
 select 
