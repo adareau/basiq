@@ -16,7 +16,7 @@ WHERE $username IS NOT NULL;
 
 SELECT
     'dynamic' AS component,
-    sqlpage.read_file_as_text('shell.json') AS properties;
+    sqlpage.run_sql('header.shell.sql') AS properties;
 
 -- =============================================================================
 -- ================================= Login =====================================
